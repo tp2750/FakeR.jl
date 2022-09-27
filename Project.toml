@@ -1,0 +1,13 @@
+name = "FakeR"
+uuid = "c5e85ae5-ee9c-4ab3-9a8b-9ba885715241"
+authors = ["Thomas Poulsen"]
+version = "0.1.0"
+
+[compat]
+julia = "1.8"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
