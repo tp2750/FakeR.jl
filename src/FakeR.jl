@@ -1,6 +1,6 @@
 module FakeR
 
-## TODO plyr::arrange: sort
+using DataFrames
 
 """
     R: c(1,2,3) vector constructor
@@ -20,13 +20,38 @@ macro capture_output(ex::Expr)
     return :( sprint(io -> $(esc(ex.args[1]))(io,$(esc(ex.args[2])))) )
 end
 
-## TODO: ddply
-
 """
     R: dim() dimentions of array
     julia: size
 """    
 dim(x) = size(x)
+
+
+"""
+    R: dir.create(path, recursive = FALSE , mode = "0777").
+    create dictionary
+    dir_create
+    julia: mkpath, mkdir
+    Using mkpath so effectively recursive = TRUE always.
+    Also dir.create() inly takes single path, dir_create can take a vector
+"""
+function dir_create(x; recursive = false, mode = "0777")
+    Omode = parse(UInt16, mode, base = 8)
+    mkpath.([x;], mode = Omode)
+end
+
+
+"""
+    R: file.info(file)
+    returns data.frame of info on file
+    file_info
+    julia: stat
+    stat does not return dataframe, but this does
+"""
+function file_info(x...)
+    DataFrame(stat.([x... ;]))
+end
+    
 
 ## TODO exists. The following does not work
 # """
@@ -38,6 +63,24 @@ dim(x) = size(x)
 # exists(x) = @isdefined(x)
 
 """
+    R: list.files(path=".", pattern=NULL, all.files=FALSE, full.names=FALSE, recursive=FALSE, ignore.case=FALSE, inclue.dirs=FALSE, no..=FALSE)
+    list files
+    list_files. TODO: more keyword arguments
+    julia: readdir(path=".",; join=false, sort=true)
+"""
+function list_files(path=pwd(); pattern = nothing, full_names=false, recursive = false)
+    if recursive
+        res = full_names ? reduce(vcat,[joinpath.(x[1],x[3]) for x in walkdir(path)]) : reduce(vcat,[x[3] for x in walkdir(path)])
+    else
+        res = full_names ? readdir(path, join = true) : readdir(path)
+    end
+    if ! isnothing(pattern)
+        return res[[occursin(Regex(pattern), x) for x in res]]
+    end
+    res
+end
+
+"""
     R: range(c(3,2,1)) == c(1,3)
     Retuns a vector of the extreme values of a vector.
     julia: extrema([3,2,1])
@@ -45,15 +88,25 @@ dim(x) = size(x)
 """
 range(v::Vector) = extrema(v)
 
-## TODO seq
 
-## TODO lattice:xyplot
+"""
+    R: toupper(), tolower()
+    Uppercase or lowercase string or vector of strings
+    julia: uppercase, lowercase
+"""
+toupper(x::String) = uppercase(x)
+tolower(x::String) = lowercase(x)
+
+toupper(v::Vector{String}) = uppercase.(v)
+tolower(v::Vector{String}) = lowercase.(v)
+
+const TRUE = true
+const FALSE = false
+
 
 end
 
 # Eg
-# Dir.create
-# File.info
 # NzMisc::checkRows -> assertrows
 # NzMisc::CVpct
 # Plyr::summarise
@@ -63,6 +116,10 @@ end
 # Dirname
 # Grep, grepl
 # Sub, gsub
+# plyr::arrange: sort
+# lattice:xyplot
+# seq
+# ddply
 
 
 # Interactions: csv strip_whitespace
