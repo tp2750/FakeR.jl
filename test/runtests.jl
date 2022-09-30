@@ -11,6 +11,6 @@ using Test
     @test FakeR.toupper(FakeR.tolower(FakeR.c("ABC", "cde"))) == FakeR.c("ABC", "CDE")
     @test FakeR.TRUE
     @test FakeR.FALSE == false    
-    @test FakeR.file_info( FakeR.dir_create("/tmp/a", mode = "777")).mode == [0x41fd]
-    @test any(occursin.(r"/tmp/a",FakeR.list_files("/tmp", full_names = true)))
+    @test FakeR.file_info( FakeR.dir_create("/tmp/a", mode = "777")).desc == ["/tmp/a"]
+    @test any(occursin.(r"/tmp/a",FakeR.list_files("/tmp", full_names = true)))    
 end

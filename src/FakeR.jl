@@ -68,7 +68,7 @@ end
     list_files. TODO: more keyword arguments
     julia: readdir(path=".",; join=false, sort=true)
 """
-function list_files(path=pwd(); pattern = nothing, full_names=false, recursive = false)
+function list_files(path=pwd(); pattern = nothing, full_names=false, recursive = false, all_files=false)
     if recursive
         res = full_names ? reduce(vcat,[joinpath.(x[1],x[3]) for x in walkdir(path)]) : reduce(vcat,[x[3] for x in walkdir(path)])
     else
@@ -76,6 +76,9 @@ function list_files(path=pwd(); pattern = nothing, full_names=false, recursive =
     end
     if ! isnothing(pattern)
         return res[[occursin(Regex(pattern), x) for x in res]]
+    end
+    if ! all_files
+        res = filter( x -> !occursin(r"^\.|/\.", x), res)
     end
     res
 end
@@ -120,6 +123,11 @@ end
 # lattice:xyplot
 # seq
 # ddply
-
+# runif, dnorm, rnrom and other sampligs
+# lm
+# t.test
+# expand.grid
+# see also http://www.johnmyleswhite.com/notebook/2012/04/09/comparing-julia-and-rs-vocabularies/
+## http://adv-r.had.co.nz/Vocabulary.html
 
 # Interactions: csv strip_whitespace
