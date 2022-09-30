@@ -40,6 +40,31 @@ function dir_create(x; recursive = false, mode = "0777")
     mkpath.([x;], mode = Omode)
 end
 
+"""
+    R: grepl(pattern, vector, ignore.case=false)
+    look for pattern in vector
+    julia: occursin/contains. Use string for the pattern
+    FakeR.grepl("^a", ["ale", "bale"])
+"""
+function grepl(p,v; ignore_case = false)
+    pat = ignore_case ? Regex(p,"i") : Regex(p)
+    occursin.(pat, [v;])
+end
+
+"""
+    R: grep(pattern, x, ignore.case = FALSE, value = FALSE, invert = FALSE)
+    return indices or values of match
+    julia: filter and occursin/contains
+"""
+function grep(p, v; value=false, ignore_case = false, invert = false)
+    pat = ignore_case ? Regex(p,"i") : Regex(p)
+    found = contains(pat).(v)
+    invert && (found = .!found)
+    if value
+        return v[found]
+    end
+    findall(found)
+end
 
 """
     R: file.info(file)
@@ -117,7 +142,6 @@ end
 # Capture.output
 # Basename, sans ext
 # Dirname
-# Grep, grepl
 # Sub, gsub
 # plyr::arrange: sort
 # lattice:xyplot
