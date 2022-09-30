@@ -134,7 +134,8 @@ const FALSE = false
 
 end
 
-# Eg
+# ls()
+# rm()
 # NzMisc::checkRows -> assertrows
 # NzMisc::CVpct
 # Plyr::summarise
