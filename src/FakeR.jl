@@ -136,6 +136,7 @@ end
 
 # ls()
 # rm()
+# table()
 # NzMisc::checkRows -> assertrows
 # NzMisc::CVpct
 # Plyr::summarise
