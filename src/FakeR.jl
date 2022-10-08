@@ -136,6 +136,7 @@ end
 
 # ls()
 # rm()
+# table() : https://github.com/nalimilan/FreqTables.jl
 # NzMisc::checkRows -> assertrows
 # NzMisc::CVpct
 # Plyr::summarise
