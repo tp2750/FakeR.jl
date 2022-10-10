@@ -139,6 +139,7 @@ end
 # table() : https://github.com/nalimilan/FreqTables.jl
 # NzMisc::checkRows -> assertrows
 # NzMisc::CVpct
+# sprintf (vectorized)
 # Plyr::summarise
 # List.files()
 # Capture.output
